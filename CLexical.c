@@ -14,13 +14,12 @@ int lineNumber = 1;
 
 const char PREPROCESSOR[][10] = {"#include","#define","#undef", "#ifdef" ,"#ifndef", "#if", "#else", "#elif", "#endif", "#error","#pragma"};
 const char KEYWORD[][10]  = {"char","int","float","long","short","double","void","if","for","else","while","switch","struct","const"};
-const char OPERATOR[][3]  = {"+" ,"-" ,"/" ,"*" ,"%" ,"<" ,">" ,"=" ,"|" ,"&", "!","++","--","||","&&", ",", ".","?",":",
-														 "+=","-=","/=","*=","%=","<=",">=","==","|=","&=","!="};
+const char OPERATOR[][3]  = {"+" ,"-" ,"/" ,"*" ,"%" ,"<" ,">" ,"=" ,"|" ,"&", "!","++","--","||","&&", ",", ".","?",":","+=","-=","/=","*=","%=","<=",">=","==","|=","&=","!=","->"};
 const char PUNCTUATION[]  = ";{}[]()";
 
 const int PREPROCESSOR_SIZE = 11;
 const int KEYWORD_SIZE = 14;
-const int OPERATOR_SIZE = 30;
+const int OPERATOR_SIZE = 31;
 const int PUNCTUATION_SIZE = 7;
 
 struct symbol_table{
@@ -299,9 +298,66 @@ char* tag_lexeme(char lexeme[32]){
 
 void main(){
 	char lexeme[32];
+	int float_check = 0;
+	char float_buff[32];
+	char line_buff;
 	while(read_lexeme(lexeme)){
+		if(float_check!=0 && line_buff!=lineNumber){
+			if(float_check == 1)printf("%4d | %20s | %s\n",line_buff,tag_lexeme(float_buff),float_buff);
+			else printf("%4d | %20s | %s\n",line_buff,"FLOAT CONST",float_buff);
+
+			float_check = 0;
+		}
+
+		if(is_numeral(lexeme)){
+			if(float_check==0){//start float buffer
+				float_check=1;
+				strcpy(float_buff,lexeme);
+				line_buff = lineNumber;
+			}
+			else if(float_check == 1){
+				printf("%4d | %20s | %s\n",line_buff,tag_lexeme(float_buff),float_buff);
+
+				strcpy(float_buff,lexeme);
+				line_buff = lineNumber;
+			}
+			else if(float_check == 2){ //caught the float
+				float_check = 0;
+				strcat(float_buff,lexeme);
+				printf("%4d | %20s | %s\n",lineNumber,"FLOAT CONST",float_buff);
+			}
+			continue;
+		}
+		else if(lexeme[0]=='.'){
+			if(float_check==0){
+				float_check == 2;
+				strcpy(float_buff,lexeme);
+				line_buff = lineNumber;
+			}
+			else if(float_check == 1){
+				float_check = 2;
+				strcat(float_buff,".");
+			}
+			else if(float_check == 2){
+				printf("%4d | %20s | %s\n",line_buff,"FLOAT CONST",float_buff);
+
+				float_check == 2;
+				strcpy(float_buff,lexeme);
+				line_buff = lineNumber;
+			}
+			continue;
+		}
+		else if(float_check !=0){
+			if(float_check == 1)printf("%4d | %20s | %s\n",line_buff,tag_lexeme(float_buff),float_buff);
+			else printf("%4d | %20s | %s\n",line_buff,"FLOAT CONST",float_buff);
+
+			float_check = 0;
+		}
 		printf("%4d | %20s | %s\n",lineNumber,tag_lexeme(lexeme),lexeme);
 	}
+	if(float_check == 1)printf("%4d | %20s | %s\n",line_buff,tag_lexeme(float_buff),float_buff);
+	else if (float_check == 2) printf("%4d | %20s | %s\n",line_buff,"FLOAT CONST",float_buff);
+
 	if(lexeme[0]!='\0')
 		printf("%4d | %20s | %s\n",lineNumber,tag_lexeme(lexeme),lexeme);
 }
