@@ -171,7 +171,8 @@ int is_symbol(char pattern[], char type[]){
 	int len_pat = strlen(pattern);
 	int len_tkn_pat;
 
-	for(resv_symbols=RESV_SYMBL; resv_symbols!=NULL; resv_symbols=resv_symbols->next){
+	for(resv_symbols=RESV_SYMBL; resv_symbols!=NULL;
+			resv_symbols=resv_symbols->next){
 		tkn = resv_symbols->info;
 
 		if(strcmp(pattern,tkn->pattern)==0){

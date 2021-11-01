@@ -1,13 +1,11 @@
 /*
 Author : Edwin Jose George
-Input stream should be CRLF or LF formated for line number to work
+Input stream should be CRLF formated for line number to work
 */
 
 #include<stdio.h>
 #include<string.h>
-#include<ctype.h>
 #include<stdlib.h>
-#include<unistd.h>
 #include "stack.h"
 #include "definition.h"
 
@@ -60,7 +58,8 @@ int read_lexemes(char buffer[],char type[]){
 		if(j == 0){ // this is the first occurance
 
 			//ignore initial whitespaces
-			if(buffer[j]==NEWLINE || buffer[j]==CARRIAGE || buffer[j]==SPACE || buffer[j]==TAB)continue;
+			if(buffer[j]==NEWLINE || buffer[j]==CARRIAGE)continue;
+			if(buffer[j]==SPACE   || buffer[j]==TAB)continue;
 
 			//prepare to read stream - string,char,comment
 			reading_stream = scan_stream(buffer[j],&state_stream);
@@ -126,8 +125,9 @@ int read_lexemes(char buffer[],char type[]){
 
 		if(reading_numerial){ //might belong to numeral grp
 			reading_numerial = scan_numerials(buffer[j],&state_numerial);
-			if(reading_symbol == 0 && reading_numerial ){j++;continue;} // reading number for sure!
-			if(reading_symbol == 0 && reading_numerial == 0){ // current char have ended numerial
+			if(reading_symbol == 0 && reading_numerial ){j++;continue;} //reading num
+			if(reading_symbol == 0 && reading_numerial == 0){
+				//current char have ended numerial
 				LOOK_AHEAD.hold = 1;
 				LOOK_AHEAD.ch = buffer[j];
 				buffer[j] = '\0';
@@ -137,7 +137,10 @@ int read_lexemes(char buffer[],char type[]){
 				return -1;
 
 			}
-			if(reading_symbol == 1 && reading_numerial != 0){ // there will be no pattern such that first 2 char are both symbol type and numerial type at same time!
+			if(reading_symbol == 1 && reading_numerial != 0){
+				/*there will be no pattern such that first 2 char are both symbol type
+				  and numerial type at same time!
+				*/
 				reading_symbol = 0;
 				j++;continue;
 			}
