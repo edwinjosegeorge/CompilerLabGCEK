@@ -28,6 +28,7 @@ int read_lexemes(char buffer[],char type[]){
 	int reading_identifier=0, reading_symbol=0;
 	int reading_numerial=0,  reading_stream=0;
 	int state_numerial=0, state_stream=0, state_identifier=0;
+	int stream_type = 0;
 
 	while(1){
 
@@ -54,6 +55,7 @@ int read_lexemes(char buffer[],char type[]){
 			printf("ERROR at line %d : cannot detect category | %s \n",lineNumber,buffer);
 			return -1;
 		}
+
 
 		if(j == 0){ // this is the first occurance
 
@@ -93,7 +95,17 @@ int read_lexemes(char buffer[],char type[]){
 			reading_stream = scan_stream(buffer[j],&state_stream);
 			if(reading_stream == 1){j++;continue;}
 			if(reading_stream == 0){ //reading stream has ended
-				if(is_stream(buffer,type) == 1)return 1;//success
+				stream_type = is_stream(buffer,type);
+				if(stream_type == 1)return 1;//success
+				if(stream_type ==-1){//process escape sequence
+					buffer[1]='\0';
+					j = 0;
+					reading_identifier=0;reading_symbol=0;
+					reading_numerial=0  ;reading_stream=0;
+					state_numerial=0; state_stream=0; state_identifier=0;
+					stream_type = 0;
+					continue;
+				}
 				printf("ERROR at line %d : cannot detect stream | %s \n",lineNumber,buffer);
 				return -1;
 			}
