@@ -1,0 +1,101 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[a4paper, total={6in, 9.5in}]{geometry}
+\usepackage[pdftex]{graphicx} %for embedding images
+\usepackage{url} %for proper url entries
+\usepackage[backend=biber]{biblatex}
+\usepackage{float}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{setspace}
+\usepackage{ragged2e}
+
+\usepackage{lipsum}
+
+\usepackage{listings}   %configuration for codes
+\usepackage{colortbl}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{plain}{
+	backgroundcolor=\color{backcolour},   
+	numberstyle=\tiny\color{codegray},
+	basicstyle=\ttfamily\scriptsize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	keepspaces=true,                 
+	numbers=left,       
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\lstdefinestyle{Terminal}{
+	language=bash,
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\scriptsize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	keepspaces=true,                 
+	numbers=left,       
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\lstdefinestyle{CStyle}{
+	language=C,
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\scriptsize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	keepspaces=true,                 
+	numbers=left,       
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\begin{document}
+\renewcommand\bibname{References} 
+%Renames "Bibliography" to "References" on ref page
+
+\renewcommand{\contentsname}{List of Experiments}
+
+\renewcommand{\chaptername}{Experiment}
+
+%include other pages
+\input{frontcover.tex}
+\input{certificate.tex}
+\input{visionmission.tex}
+
+
+\pagenumbering{roman} %numbering before main content starts
+\setcounter{page}{0}
+
+\tableofcontents
+
+\cleardoublepage
+\pagenumbering{arabic} %reset numbering to normal for the main content
+
+\input{Expt1.tex} 
+\input{Expt2.tex}
+
+%\printbibliography
+\end{document}

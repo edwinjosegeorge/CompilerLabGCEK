@@ -1,0 +1,39 @@
+Reading the file sample.c
+
+   1 |   MULTI_LINE_COMMENT | /*Simple C program for lex testing
+*/
+   3 |        PRE_PROCESSOR | #include
+   3 |            LESS_THAN | <
+   3 |           IDENTIFIER | stdio
+   3 |                  DOT | .
+   3 |           IDENTIFIER | h
+   3 |         GREATER_THAN | >
+   4 |              KEYWORD | void
+   4 |           IDENTIFIER | main
+   4 |     PARANTHESIS_OPEN | (
+   4 |    PARANTHESIS_CLOSE | )
+   4 |       CURLY_BKT_OPEN | {
+   5 |              KEYWORD | float
+   5 |           IDENTIFIER | pi
+   5 |                EQUAL | =
+   5 |          FLOAT CONST | 3.14
+   5 |            SEMICOLON | ;
+   6 |  SINGLE_LINE_COMMENT | //This is a comment line
+   7 |              KEYWORD | unsigned
+   7 |              KEYWORD | long
+   7 |              KEYWORD | int
+   7 |           IDENTIFIER | ph
+   7 |                EQUAL | =
+   7 |        DECIMAL CONST | 123
+   7 |            SEMICOLON | ;
+   8 |           IDENTIFIER | printf
+   8 |     PARANTHESIS_OPEN | (
+   8 |         STRING CONST | "Hello world!"
+   8 |    PARANTHESIS_CLOSE | )
+   8 |            SEMICOLON | ;
+   9 |           IDENTIFIER | putchar
+   9 |     PARANTHESIS_OPEN | (
+   9 |           CHAR CONST | '\n'
+   9 |    PARANTHESIS_CLOSE | )
+   9 |            SEMICOLON | ;
+  10 |      CURLY_BKT_CLOSE | }

@@ -37,6 +37,7 @@ void initialize_resv_token(){
 	RESV_WORDS = push(RESV_WORDS,new_resv_token("#endif"  ,"PRE_PROCESSOR"));
 	RESV_WORDS = push(RESV_WORDS,new_resv_token("#error"  ,"PRE_PROCESSOR"));
 	RESV_WORDS = push(RESV_WORDS,new_resv_token("#pragma" ,"PRE_PROCESSOR"));
+	RESV_WORDS = push(RESV_WORDS,new_resv_token("#line"   ,"PRE_PROCESSOR"));
 
 	RESV_WORDS = push(RESV_WORDS,new_resv_token("void"    ,"KEYWORD"));
 	RESV_WORDS = push(RESV_WORDS,new_resv_token("char"    ,"KEYWORD"));
@@ -67,6 +68,7 @@ void initialize_resv_token(){
 	RESV_WORDS = push(RESV_WORDS,new_resv_token("extern"  ,"KEYWORD"));
 	RESV_WORDS = push(RESV_WORDS,new_resv_token("volatile","KEYWORD"));
 	RESV_WORDS = push(RESV_WORDS,new_resv_token("sizeof"  ,"KEYWORD"));
+	RESV_WORDS = push(RESV_WORDS,new_resv_token("const"  ,"KEYWORD"));
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -239,16 +241,17 @@ int is_identifier(char pattern[],char type[]){
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~handling string/char/comment~~~~~~~~~~~~~~~~~~~~~~~~~
 int scan_stream(char pattern, int*state){
-	/*identifies stream of char const, string const, single-multi comments
+	/*identifies stream of char/string const, single/multi comments, esc sequence
 	returns  1 -> reading the stream
 	returns  0 -> not reading the stream
-	returns -1 -> waiting to identify comment!
+	returns -1 -> waiting for 1 more char
 	'state' denotes the DFA state matching stream. auto updates this variable
 	*/
 	if((*state) == 0){
-		if(pattern == '\''){(*state)=1;return  1;}
-		if(pattern == '\"'){(*state)=4;return  1;}
-		if(pattern == '/' ){(*state)=7;return -1;}
+		if(pattern == '\''){(*state)=1; return  1;}
+		if(pattern == '\"'){(*state)=4; return  1;}
+		if(pattern == '/' ){(*state)=7; return -1;}
+		if(pattern == '\\'){(*state)=14;return  1;}
 		(*state)=12;return 0;
 	}
 	if((*state) == 1){
@@ -274,6 +277,7 @@ int scan_stream(char pattern, int*state){
 	}
 	if((*state) == 8){
 		if(pattern == NEWLINE){(*state)=9;return 0;}
+		if(pattern == '\\'){(*state)=13;return 1;}
 		return 1;
 	}
 	if((*state) == 9 )return 0;
@@ -287,6 +291,9 @@ int scan_stream(char pattern, int*state){
 		(*state)=10;return 1;
 	}
 	if((*state) == 12)return 0;
+	if((*state) == 13){(*state)=8 ;return 1;}
+	if((*state) == 14){(*state)=15;return 0;}
+	if((*state) == 15)return 0;
 }
 
 int is_stream(char pattern[], char type[20]){
@@ -294,6 +301,7 @@ int is_stream(char pattern[], char type[20]){
 	  the type of identified stream.
 		  returns  0 -> invalid
 			returns  1 -> identifed stream. The 'type' holds the identifed category
+			returns -1 -> found escape sequence. decrement the buffer!!
 	*/
 
 	int state = 0;
@@ -301,11 +309,12 @@ int is_stream(char pattern[], char type[20]){
 		scan_stream(pattern[i],&state);
 	}
 
-	if(state==3 ){strcpy(type,"CHAR CONST");    return 1;}
-	if(state==6 ){strcpy(type,"STRING CONST");  return 1;}
-	if(state==8 ){strcpy(type,"COMMENT");       return 1;}
-	if(state==9 ){strcpy(type,"COMMENT");       return 1;}
-	// state==7  -> single slash means nothing!
+	if(state==3 ){strcpy(type,"CHAR CONST");     return  1;}
+	if(state==6 ){strcpy(type,"STRING CONST");   return  1;}
+	if(state==8 ){strcpy(type,"COMMENT");        return  1;}
+	if(state==9 ){strcpy(type,"COMMENT");        return  1;}
+	if(state==15){strcpy(type,"ESCAPE SEQUENCE");return -1;}
+	// state==7  -> single forward slash means nothing!
 	return 0;
 }
 
