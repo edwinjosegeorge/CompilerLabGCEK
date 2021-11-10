@@ -1,6 +1,8 @@
-*/a.out
-EXP2/lex.yy.c
 Record-book-latex/*.log
 Record-book-latex/*.aux
 Record-book-latex/main.*
 !Record-book-latex/main.tex
+*/a.out
+*/lex.yy.c
+*/y.tab.c
+*/y.tab.h
