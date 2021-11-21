@@ -1,7 +1,9 @@
-Record-book-latex/*.log
-Record-book-latex/*.aux
+*.log
+*.aux
 Record-book-latex/main.*
 !Record-book-latex/main.tex
+CodesOnly/main.*
+!CodesOnly/main.tex
 */a.out
 */lex.yy.c
 */y.tab.c
