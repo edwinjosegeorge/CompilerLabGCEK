@@ -1,0 +1,6 @@
+YACC calculator
+Supported symbols: + - * / ^ %
+Warning: result reduced to integer type!
+
+Enter the integer expression: 22*3* (58+29-55)
+Result is : 2112
