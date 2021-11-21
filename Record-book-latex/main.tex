@@ -9,7 +9,12 @@
 \usepackage{setspace}
 \usepackage{ragged2e}
 
-\usepackage{lipsum}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=black,  %choose some color if you want links to stand out
+}
 
 \usepackage{listings}   %configuration for codes
 \usepackage{colortbl}
@@ -96,6 +101,7 @@
 
 \input{Expt1.tex} 
 \input{Expt2.tex}
+\input{Expt3.tex}
 
 %\printbibliography
 \end{document}
