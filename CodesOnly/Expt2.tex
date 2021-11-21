@@ -1,0 +1,27 @@
+\section{Lexcial analyzer for C language using Lex tool}
+\subsection{C-Program}
+Header file \textbf{stack.h} to stimulate stack.
+\lstinputlisting[style=CStyle]{../EXP2/stack.h}
+
+\vspace{0.5cm}
+Header file \textbf{definition.h} holds various subroutines and constants that aid to analyze keywords and identifiers. The lex tool detects identifiers. A table is cross checked to detect keywords.
+\lstinputlisting[style=Cstyle]{../EXP2/definition.h}
+
+\vspace{0.5cm}
+Lex file \textbf{CLexical.l} initiates and scans lexemes.
+\lstinputlisting[style=Cstyle]{../EXP2/CLexical.l}
+
+
+
+\subsection{Output}
+C program used for testing \textbf{sample.c}.
+\lstinputlisting[style=CStyle]{../EXP2/sample.c}
+
+
+\vspace{0.5cm}
+Compiling lex file
+\lstinputlisting[style=Terminal]{../EXP2/run.sh}
+
+\vspace{0.5cm}
+Lexical analyser output
+\lstinputlisting[style=plain]{../EXP2/sample_out.txt}

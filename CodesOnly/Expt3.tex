@@ -1,0 +1,43 @@
+\section{Generation of YACC specification for few syntactic categories}
+\subsection{Recognize Arithmetic expression}
+\subsubsection{Lex program}
+\lstinputlisting[style=CStyle]{../EXP3/expression.l}
+\subsubsection{Yacc Program}
+\lstinputlisting[style=CStyle]{../EXP3/expression.y}
+\subsubsection{Output}
+Compiling program
+\lstinputlisting[style=Terminal]{../EXP3/expression_run.sh}
+
+
+\vspace{0.5cm}
+Output
+\lstinputlisting[style=plain]{../EXP3/expression_output.txt}
+
+
+\subsection{Recognize letter followed by any number of letters or digits}
+\subsubsection{Lex program}
+\lstinputlisting[style=CStyle]{../EXP3/variable.l}
+\subsection{Yacc Program}
+\lstinputlisting[style=CStyle]{../EXP3/variable.y}
+\subsubsection{Output}
+Compiling program
+\lstinputlisting[style=Terminal]{../EXP3/variable_run.sh}
+
+
+\vspace{0.5cm}
+Output
+\lstinputlisting[style=plain]{../EXP3/variable_output.txt}
+
+\subsection{Stimulate Calculator}
+\subsubsection{Lex program}
+\lstinputlisting[style=CStyle]{../EXP3/calculator.l}
+\subsubsection{Yacc Program}
+\lstinputlisting[style=CStyle]{../EXP3/calculator.y}
+\subsubsection{Output}
+Compiling program
+\lstinputlisting[style=Terminal]{../EXP3/calculator_run.sh}
+
+
+\vspace{0.5cm}
+Output
+\lstinputlisting[style=plain]{../EXP3/calculator_output.txt}
