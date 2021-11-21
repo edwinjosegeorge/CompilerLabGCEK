@@ -3,8 +3,8 @@
 %}
 
 %%
-a return A;
-b return B;
+[A-Za-z] return letter;
+[0-9] return digit;
 \n return NEWLINE;
 . return OTHER;
 %%

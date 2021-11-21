@@ -5,7 +5,7 @@
 To design and implement YACC specification for the following syntactic categories.
 \begin{enumerate}
 	\item Program to recognize a valid arithmetic expression that uses operator +, – , * and /.
-	%\item Program to recognize a valid variable which starts with a letter followed by any	number of letters or digits.
+	\item Program to recognize a valid variable which starts with a letter followed by any	number of letters or digits.
 	%\item Implementation of Calculator using LEX and YACC
 	%\item Convert the BNF rules into YACC form and write code to generate abstract syntax tree
 \end{enumerate}
@@ -86,6 +86,47 @@ Compiling program
 Output
 \lstinputlisting[style=plain]{../EXP3/expression_output.txt}
 
+
+\section{Recognize letter followed by any number of letters or digits}
+\subsection{Algorithm}
+\begin{algorithm}[H]
+	\caption{An algorithm to recognize variables}
+	\begin{algorithmic}[1]
+		\State $buf \gets $ inputChar()
+		\If{$buf$ == letter}
+		\State $return$ letter
+		\ElsIf{$buf$ == digit}
+		\State $return$ digit
+		\ElsIf{$buf$ == newline}
+		\State $return$ NEWLINE
+		\Else
+		\State $return$ error
+		\EndIf
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{A grammar to recognize variables}
+	\begin{algorithmic}[1]
+		\State $FINAL\_VAR \gets letter\ VAR\ NEWLINE$
+		\State $VAR \gets VAR\ letter$
+		\State $VAR \gets VAR\ digit$
+		\State $VAR \gets$ Epsilon
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Lex program}
+\lstinputlisting[style=CStyle]{../EXP3/variable.l}
+\subsection{Yacc Program}
+\lstinputlisting[style=CStyle]{../EXP3/variable.y}
+\subsection{Output}
+Compiling program
+\lstinputlisting[style=Terminal]{../EXP3/variable_run.sh}
+
+
+\vspace{0.5cm}
+Output
+\lstinputlisting[style=plain]{../EXP3/variable_output.txt}
 
 
 \section{Result}
