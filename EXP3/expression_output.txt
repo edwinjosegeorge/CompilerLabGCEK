@@ -1,0 +1,5 @@
+expression.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
+expression.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+Enter the expression
+66+(a*58)/22 - b+d
+VALID expression
