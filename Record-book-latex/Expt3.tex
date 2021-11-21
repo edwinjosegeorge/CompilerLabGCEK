@@ -6,7 +6,7 @@ To design and implement YACC specification for the following syntactic categorie
 \begin{enumerate}
 	\item Program to recognize a valid arithmetic expression that uses operator +, – , * and /.
 	\item Program to recognize a valid variable which starts with a letter followed by any	number of letters or digits.
-	%\item Implementation of Calculator using LEX and YACC
+	\item Implementation of Calculator using LEX and YACC
 	%\item Convert the BNF rules into YACC form and write code to generate abstract syntax tree
 \end{enumerate}
 
@@ -128,6 +128,63 @@ Compiling program
 Output
 \lstinputlisting[style=plain]{../EXP3/variable_output.txt}
 
+\section{Stimulate Calculator}
+\subsection{Algorithm}
+\begin{algorithm}[H]
+	\caption{An algorithm to recognize numbers and operators}
+	\begin{algorithmic}[1]
+		\State $buf \gets ""$
+		\State $i \gets 0$
+		\State $buf[i] \gets $ inputChar()
+		\While{$buf[i]$ == whitespace}
+		\State $buf[i] \gets $ inputChar()
+		\EndWhile
+		
+		\If{ $buf[i]$ == operator }
+		\State $return$ $buf[i]$
+		\ElsIf{ $buf[i]$ == NEWLINE }
+		\State $return$ NEWLINE
+		\ElsIf{ $buf[i] \neq$ digit }
+		\State $return$ ERROR
+		\EndIf
+		
+		\State $i \gets i+1$
+		\While{$(buf[i]$ = inputChar()) == digit}
+		\State $i \gets i + 1$
+		\EndWhile
+		
+		\State unputChar($buf[i]$) \Comment{Put back the last char read}
+		\State $buf[i]$ = $'\ '$
+		\State $return$ convert\_to\_number($buf$)		
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{A grammar to compute expression}
+	\begin{algorithmic}[1]
+		\State $FINAL\_EXPR \gets EXPR$ $NEWLINE$ \Comment{print expression}
+		\State $EXPR \gets number$ \Comment{RHS = LHS}
+		\State $EXPR \gets $openBracket $EXPR$ closeBracket \Comment{RHS = valueOf(EXPR)}
+		\State $EXPR \gets EXPR$ * $EXPR$ \Comment{RHS = EXPR1 * EXPR2}
+		\State $EXPR \gets EXPR$ + $EXPR$ \Comment{RHS = EXPR1 + EXPR2}
+		\State $EXPR \gets EXPR$ - $EXPR$ \Comment{RHS = EXPR1 - EXPR2}
+		\State $EXPR \gets EXPR$ / $EXPR$ \Comment{if(EXPR2 != 0) then RHS = EXPR1 / EXPR2, else print "error"}
+		
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Lex program}
+\lstinputlisting[style=CStyle]{../EXP3/calculator.l}
+\subsection{Yacc Program}
+\lstinputlisting[style=CStyle]{../EXP3/calculator.y}
+\subsection{Output}
+Compiling program
+\lstinputlisting[style=Terminal]{../EXP3/calculator_run.sh}
+
+
+\vspace{0.5cm}
+Output
+\lstinputlisting[style=plain]{../EXP3/calculator_output.txt}
 
 \section{Result}
 Implemented and verified YACC specification for a few syntactic categories

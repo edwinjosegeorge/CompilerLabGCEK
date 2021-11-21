@@ -29,7 +29,7 @@ EXPR: NUMBER            { $$ = $1; }
                           }
                           $$ = $1 % $3;
                         }
-	  | EXPR '^' EXPR     { $$ = pow($1,$3); };	
+	  | EXPR '^' EXPR     { $$ = pow($1,$3); };
 %%
 
 void main(){
