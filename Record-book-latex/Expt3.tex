@@ -1,0 +1,92 @@
+\clearpage
+\chapter{Generation of YACC specification for a few syntactic categories}
+
+\section{Aim}
+To design and implement YACC specification for the following syntactic categories.
+\begin{enumerate}
+	\item Program to recognize a valid arithmetic expression that uses operator +, – , * and /.
+	%\item Program to recognize a valid variable which starts with a letter followed by any	number of letters or digits.
+	%\item Implementation of Calculator using LEX and YACC
+	%\item Convert the BNF rules into YACC form and write code to generate abstract syntax tree
+\end{enumerate}
+
+
+\section{Recognize Arithmetic expression}
+\subsection{Algorithm}
+\begin{algorithm}[H]
+	\caption{An algorithm to recognize numbers , operators and variables}
+	\begin{algorithmic}[1]
+		\State $isNum \gets False$
+		\State $isVar \gets False$
+		\State $buf \gets ""$
+		\State $i \gets 0$
+		\State $buf[i] \gets $ inputChar()
+		\While{$buf[i]$ == whitespace}
+		\State $buf[i] \gets $ inputChar()
+		\EndWhile
+		
+		\If{ $buf[i]$ == operator }
+		\State $return$ $buf[i]$,"operator"
+		\ElsIf{ $buf[i]$ == '(' }
+		\State $return$ $buf[i]$,"openBracket"
+		\ElsIf{ $buf[i]$ == ')' }
+		\State $return$ $buf[i]$,"closeBracket"
+		\ElsIf{$buf[i]$ == alpha or underscore}
+		\State $isVar \gets True$
+		\ElsIf{$buf[i]$ == number}
+		\State $isNum \gets True$
+		\Else
+		\State $return$ "ERROR"
+		\EndIf
+		\State $i \gets i+1$
+		
+		\While{$(buf[i]$ = inputChar()) $\neq$ EOF}
+		\If{$isVar and buf[i]$ == (alphaNum or underscore)}
+		\State $i \gets i + 1$
+		\State continue
+		\ElsIf{$isNum$ and $buf$ == number)}
+		\State $i \gets i + 1$
+		\State continue
+		\Else
+		\State unputChar($buf[i]$) \Comment{Put back the last char read}
+		\State $buf[i]$ = $'\ '$
+		\If{$isVar$}
+		\State $return$ $buf$,"variable"
+		\ElsIf{$isNum$}
+		\State $return$ $buf$,"number"
+		\Else
+		\State $return$ "ERROR"
+		\EndIf
+		\EndIf
+		\EndWhile
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{A grammar to recognize expression}
+	\begin{algorithmic}[1]
+		\State $FINAL\_EXPR \gets EXPR$ $NEWLINE$
+		\State $EXPR \gets number$
+		\State $EXPR \gets identifier$
+		\State $EXPR \gets $openBracket $EXPR$ closeBracket
+		\State $EXPR \gets EXPR$ operator $EXPR$
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Lex program}
+\lstinputlisting[style=CStyle]{../EXP3/expression.l}
+\subsection{Yacc Program}
+\lstinputlisting[style=CStyle]{../EXP3/expression.y}
+\subsection{Output}
+Compiling program
+\lstinputlisting[style=Terminal]{../EXP3/expression_run.sh}
+
+
+\vspace{0.5cm}
+Output
+\lstinputlisting[style=plain]{../EXP3/expression_output.txt}
+
+
+
+\section{Result}
+Implemented and verified YACC specification for a few syntactic categories
