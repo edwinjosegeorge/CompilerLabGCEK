@@ -1,5 +1,5 @@
-\documentclass[12pt,a4paper]{article}
-\usepackage[a4paper, total={7in, 10.85in}]{geometry}
+\documentclass[12pt,a4paper,twoside]{article}
+\usepackage[a4paper, total={7in, 10in}]{geometry}
 \usepackage[backend=biber]{biblatex}
 
 \usepackage{listings}   %configuration for codes
@@ -8,7 +8,7 @@
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{backcolour}{rgb}{1.0,1.0,1.0}
 
 \lstdefinestyle{plain}{
 	backgroundcolor=\color{backcolour},   
@@ -64,9 +64,12 @@
 }
 
 \begin{document}
-\input{Expt1.tex} 
-\newpage
-\input{Expt2.tex}
-\newpage
-\input{Expt3.tex}
+\cleardoublepage
+	\input{Expt1.tex}
+	 
+	\cleardoublepage
+	\input{Expt2.tex}
+	
+	\cleardoublepage
+	\input{Expt3.tex}
 \end{document}
