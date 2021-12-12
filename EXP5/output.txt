@@ -1,0 +1,17 @@
+Enter the number of transistions : 5
+Enter the transitions of the form 'fromState' 'symbol' 'toState'
+For epsilon, use the symbol :  e
+
+transisiton : 1 a 1
+transisiton : 1 e 2
+transisiton : 2 b 2
+
+transisiton : 2 e 3
+transisiton : 3 c 3
+Computed NFA
+{'3', '1', '2'} b {'3', '2'}
+{'3', '1', '2'} c {'3'}
+{'3', '1', '2'} a {'2', '3', '1'}
+{'3', '2'} c {'3'}
+{'3', '2'} b {'3', '2'}
+{'3'} c {'3'}
