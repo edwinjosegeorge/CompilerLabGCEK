@@ -2,8 +2,10 @@
 
  This repo holds lab programs done for the subject CS341: Compiler Lab Design, 2015 Scheme. The repo gets you the program code, as well as its script to run them. The record works are build using Latex.
 
+Get [Fair Record](https://drive.google.com/file/d/1vcWSookkcd4FezVbv86e8WcGKEJN2m8l/view?usp=sharing) or [Codes only](https://drive.google.com/file/d/1_yzNkh2YDuxXSnZWz1J32KtqkwJFoBg_/view?usp=sharing)
+
  ## Prerequisites
- Download and install `Git`, `Latex`, `GCC`, `Lex` onto your local machine.
+ Download and install `Git`, `Latex`, `GCC`, `Lex`, `Yacc`, `Python` onto your local machine.
 
  To clone this repo
  ```bash
