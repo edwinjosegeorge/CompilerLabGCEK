@@ -1,0 +1,5 @@
+NOTE:
+        'i' denotes an identifier
+        End the expression with a special symbol '$'
+Enter an arithmetic expression : i+i+i*(i+i)$
+VALID expression
