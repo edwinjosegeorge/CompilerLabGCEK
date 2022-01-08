@@ -21,8 +21,7 @@ Top-down parsing can be viewed as the problem of constructing a parse tree for t
 the production to be applied for a non-terminal. Once an production is chosen, the rest of the parsing process consists of "\textit{matching}" the terminal symbols in the production body with the input string.
 
 
-Recursive descent parser is a general form of top-down parsing, which may require backtracking to find the correct production to be applied. On the other hand, a special case of recursive-descent parsing where no backtracking is required is call predictive parsing. Predictive parsing
-chooses the correct production by looking ahead at the input a fixed number
+Recursive descent parser is a general form of top-down parsing, which may require backtracking to find the correct production to be applied. On the other hand, a special case of recursive-descent parsing where no backtracking is required is call predictive parsing. Predictive parsing chooses the correct production by looking ahead at the input a fixed number
 of symbols.
 
 A recursive-descent parsing program consists of a set of procedures, one for each
@@ -55,7 +54,7 @@ repeated scans over the input.
 \end{algorithm}
 
 \begin{algorithm}[H]
-	\caption{Non-predictive recursive descent parser with backtracking)}
+	\caption{Non-predictive recursive descent parser with backtracking}
 	\begin{algorithmic}[1]
 		\Procedure{A}{ }\Comment{A : Non-terminal of grammar}
 		
@@ -83,6 +82,13 @@ repeated scans over the input.
 	\end{algorithmic}
 \end{algorithm}
 
+\begin{figure}[!h]
+	\centering
+	\includegraphics[height=3in]{../EXP6/diagram.png}
+	\caption{Top down parser for id+id*id}
+\end{figure}
+
+\break
 \section{C-Program}
 \lstinputlisting[style=CStyle,language=C]{../EXP6/recursive_descent.c}
 

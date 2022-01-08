@@ -1,9 +1,9 @@
-/*Recursive Descent parser for a given grammer
-  E –> T E’
-  E’ –> + T E’ | e
-  T –> F T’
-  T’ –> * F T’ | e
-  F –> ( E ) | id
+/*Non-predictive Recursive Descent parser with backtracking for the given grammar
+  E -> T E'
+  E' -> + T E' | e
+  T -> F T'
+  T' -> * F T' | e
+  F -> ( E ) | id
   where 'e' denotes epsilon. 'i' can be used as terminal symbol instead of 'id'.
 */
 
@@ -30,7 +30,7 @@ int match(char c){
 }
 
 int E(){
-  //E –> T E’
+  //E -> T Eprime
   int backtrack=pos;
 
   pos=backtrack;
@@ -45,7 +45,7 @@ int E(){
 }
 
 int Eprime(){
-  //E’ –> + T E’ | e
+  //Eprime -> + T Eprime | e
   int backtrack=pos;
 
   pos=backtrack;
@@ -62,7 +62,7 @@ int Eprime(){
 }
 
 int T(){
-  //T –> F T’
+  //T -> F Tprime
   int backtrack=pos;
 
   pos=backtrack;
@@ -77,7 +77,7 @@ int T(){
 }
 
 int Tprime(){
-  //T’ –> * F T’ | e
+  //Tprime -> * F Tprime | e
   int backtrack=pos;
 
   pos=backtrack;
@@ -94,7 +94,7 @@ int Tprime(){
 }
 
 int F(){
-  //F –> ( E ) | id
+  //F -> ( E ) | id
   int backtrack=pos;
 
   pos=backtrack;
