@@ -41,56 +41,70 @@ with what nonterminal to replace the string.
 
 \section{Algorithm}
 
-\begin{algorithm}[H]
-	\caption{Non-predictive recursive descent parser without backtracking}
+\begin{algorithm}[!h]
+	\caption{Computation of CLOSURE}
+	\label{alg:closure}
 	\begin{algorithmic}[1]
-		\Procedure{A}{ }\Comment{A : Non-terminal of grammar}
-		
-		\State Choose an A-production, $A \gets X X . . . X_k$
-		
-		\For{$ i = 1$ to $k$}
-		\If{$X_i$ is a nonterminal}
-		\State Call procedure \Call{$X_i$}{ }
-		\ElsIf{$X_i$ equals to the current input symbol $a$}
-		\State Advance the input to the next symbol
-		\Else
-		\State Error Occurred
-		\EndIf
-		\EndFor
+		\Procedure{CLOSURE}{I} \Comment{Returns set of Items}
+			\State $J \gets I$
+			\Repeat 
+				\ForAll{item $A \rightarrow \alpha.B\beta$}
+					\ForAll{production $B \rightarrow \gamma$ of $G$}
+						\If{$B \rightarrow .\gamma$ is not in J}
+							\State Add $B \rightarrow .\gamma$ to $J$
+						\EndIf
+					\EndFor
+				\EndFor
+			\Until{no more items are added to $J$ on one round}
+			\State \Return $J$
 		\EndProcedure
-		\State \Call{StartSymbol}{ } \Comment{Call start symbol to
-			start parsing}		
 	\end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[H]
-	\caption{Non-predictive recursive descent parser with backtracking}
+\begin{algorithm}[!h]
+	\caption{Computation of the canonical collection of set of LR(0) items}
+	\label{alg:LR0Items}
 	\begin{algorithmic}[1]
-		\Procedure{A}{ }\Comment{A : Non-terminal of grammar}
-		
-		\State $inputState \gets CurrentInputState$ 
-		\ForAll{production $P=X X . . . X_k \in A-productions$}
-		\State $backtrack =$ FALSE
-		\For{$ i = 1$ to $k$}
-		\If{$X_i$ is a nonterminal}
-		\State Call procedure \Call{$X_i$}{ }
-		\ElsIf{$X_i$ equals to the current input symbol $a$}
-		\State Advance the input to the next symbol
-		\Else \Comment{Error occurred, iterate to next production}
-		\State $backtrack = TRUE$ 
-		\State $break$
-		\EndIf
-		\EndFor
-		\If{$bracktrack = TRUE$}
-		\State $input \gets inputState$ \Comment{Restore input status}
-		\Else \Comment{Completely parsed a production}
-		\State $break$
-		\EndIf
-		\EndFor
+		\Procedure{items}{G'}
+			\State $C \gets \{ \Call{CLOSURE}{\{[S\ \rightarrow .S]\}}\}$ 
+			\Repeat
+			\ForAll{set of items $I \in C$}
+				\ForAll{grammar symbol $X$}
+					\If{$\Call{GOTO}{I,X}$ is not empty and not in $C$}
+						\State Add \Call{GOTO}{I,X} to C
+					\EndIf
+				\EndFor
+			\EndFor
+			\Until{no new set of imtes are added to $C$ on a round}
 		\EndProcedure
-		\State \Call{StartSymbol}{ } \Comment{Call start symbol to start parsing}		
 	\end{algorithmic}
 \end{algorithm}
+
+\begin{algorithm}[!h]
+	\caption{LR-parsing}
+	\label{alg:LRparser}
+	\begin{algorithmic}[1]
+		\State Let $a$ be the first symbol of $W\$$
+		\While{1}
+			\State Let $s$ be the state on top of the stack
+			\If{$\Call{ACTION}{s,a} = shift \quad t$}
+				\State push $t$ onto the stack
+				\State let $a$ be the next input symbol
+			\ElsIf{$\Call{ACTION}{s,a} = reduce \quad A \rightarrow \beta$}
+				\State pop $|\beta|$ symbols off the stack
+				\State let state $t$ now be on top of the stack
+				\State push $\Call{GOTO}{t,A}$ onto the stack
+				\State output the production $A \rightarrow \beta$
+			\ElsIf{$\Call{ACTION}{s,a} = accept$}
+				\State break \Comment{Parsing is done}
+			\Else
+				\State call error-recovery routine
+			\EndIf
+		\EndWhile
+	\end{algorithmic}
+\end{algorithm}
+
+\break
 
 \section{Grammar}
 \subsection{Augmented Grammar}
@@ -104,6 +118,7 @@ with what nonterminal to replace the string.
 	\State $E \quad \rightarrow \quad i$
 \end{algorithmic}
 
+\break
 \subsection{LR(0) Automaton}
 \begin{figure}[!h]
 	\centering
@@ -123,6 +138,7 @@ with what nonterminal to replace the string.
 	\end{tabular}
 \end{table}
 
+\break
 \subsection{Parse-Table}
 \begin{table}[!h]
 	\centering
