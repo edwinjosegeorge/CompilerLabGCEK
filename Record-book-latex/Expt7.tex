@@ -15,14 +15,25 @@ To design and construct a Shift Reduce Parser for a given language
 
 
 \section{Theory}
-Shift-reduce parsing is a form of bottom-up parsing in which a stack holdsgrammar symbols and an input buffer holds the rest of the string to be parsed.The handle always appears at the top of the stack just beforeit is identified as the handle.A special symbol \$ to mark the bottom of the stack and also the right end of theinput. 
+Shift-reduce parsing is a form of bottom-up parsing in which a stack holds
+grammar symbols and an input buffer holds the rest of the string to be parsed.
+The handle always appears at the top of the stack just before
+it is identified as the handle.
+A special symbol \$ to mark the bottom of the stack and also the right end of the
+input. 
 
-Initially, the stack is empty, and the string $w$ is on the input. During a left-to-right scan of the input string, the parser shifts zero or moreinput symbols onto the stack, until it is ready to reduce a string of grammarsymbols on top of the stack. It then reduces to the head of the appropriate production. The parser repeats this cycle until it has detected an error or untilthe stack contains the start symbol and the input is empty. Upon entering this configuration, the parser halts and announces successfulcompletion of parsing.
+Initially, the stack is empty, and the string $w$ is on the input. During a left-to-right scan of the input string, the parser shifts zero or more
+input symbols onto the stack, until it is ready to reduce a string of grammar
+symbols on top of the stack. It then reduces to the head of the appropriate production. The parser repeats this cycle until it has detected an error or until
+the stack contains the start symbol and the input is empty. Upon entering this configuration, the parser halts and announces successful
+completion of parsing.
 
 There are four possible actions a shift-reduce parser can make
 \begin{enumerate}
 	\item \textbf{Shift}.  Shift the next input symbol onto the top of the stack.
-	\item \textbf{Reduce}. The right end of the string to be reduced must be at the top ofthe stack. Locate the left end of the string within the stack and decidewith what nonterminal to replace the string.
+	\item \textbf{Reduce}. The right end of the string to be reduced must be at the top of
+the stack. Locate the left end of the string within the stack and decide
+with what nonterminal to replace the string.
 	\item \textbf{Accept}. Announce successful completion of parsing.
 	\item \textbf{Error}. Discover a syntax error and call an error recovery routine.
 \end{enumerate}
@@ -269,7 +280,10 @@ There are four possible actions a shift-reduce parser can make
 \lstinputlisting[style=CStyle,language=C]{../EXP7/shiftreducer.c}
 
 \section{Output}
-\lstinputlisting[style=plain]{../EXP7/output.txt}
+Output1
+\lstinputlisting[style=plain]{../EXP7/output1.txt}
+Output2
+\lstinputlisting[style=plain]{../EXP7/output2.txt}
 
 \section{Result}
-The program compiled and successfully parsed an given expression via Simple LR parser for the given grammar.
+The program compiled and successfully parsed a string via Simple LR parser for the given grammar.
