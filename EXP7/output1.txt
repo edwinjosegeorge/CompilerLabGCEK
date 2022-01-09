@@ -1,0 +1,26 @@
+The grammar is
+        (0) S -> E
+        (1) E -> E+E
+        (2) E -> E-E
+        (3) E -> E*E
+        (4) E -> (E)
+        (5) E -> i
+
+
+Enter the input string [max 14 charac] : i+i*i
++-----+------------------+------------------+------------------+------------------+
+|  NO | STATE            | SYMBOLS          | INPUT            | ACTION           |
++-----+------------------+------------------+------------------+------------------+
+|   0 | 0                | $                | i+i*i$           | SHIFT  state 3   |
+|   1 | 0 3              | $i               | +i*i$            | REDUCE prodt 5   |
+|   2 | 0 1              | $E               | +i*i$            | SHIFT  state 4   |
+|   3 | 0 1 4            | $E+              | i*i$             | SHIFT  state 3   |
+|   4 | 0 1 4 3          | $E+i             | *i$              | REDUCE prodt 5   |
+|   5 | 0 1 4 8          | $E+E             | *i$              | SHIFT  state 6   |
+|   6 | 0 1 4 8 6        | $E+E*            | i$               | SHIFT  state 3   |
+|   7 | 0 1 4 8 6 3      | $E+E*i           | $                | REDUCE prodt 5   |
+|   8 | 0 1 4 8 6 10     | $E+E*E           | $                | REDUCE prodt 3   |
+|   9 | 0 1 4 8          | $E+E             | $                | REDUCE prodt 1   |
+|  10 | 0 1              | $E               | $                | ACCEPT           |
++-----+------------------+------------------+------------------+------------------+
+String accepted without errors

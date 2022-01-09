@@ -1,2 +1,2 @@
-gcc recursive_descent.c
+gcc shiftreducer.c
 ./a.out
