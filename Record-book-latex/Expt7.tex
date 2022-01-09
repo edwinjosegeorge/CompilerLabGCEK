@@ -1,0 +1,275 @@
+\clearpage
+\chapter{Shift Reduce Parser}
+
+\section{Aim}
+To design and construct a Shift Reduce Parser for a given language
+\begin{algorithmic}[1]
+	\State $E \quad \rightarrow \quad E \; + \; E$
+	\State $E \quad \rightarrow \quad E \; - \; E$
+	\State $E \quad \rightarrow \quad E \; * \; E$
+	\State $E \quad \rightarrow \quad ( \; E \; )$
+	\State $E \quad \rightarrow \quad i$
+\end{algorithmic}
+
+
+
+
+\section{Theory}
+Shift-reduce parsing is a form of bottom-up parsing in which a stack holdsgrammar symbols and an input buffer holds the rest of the string to be parsed.The handle always appears at the top of the stack just beforeit is identified as the handle.A special symbol \$ to mark the bottom of the stack and also the right end of theinput. 
+
+Initially, the stack is empty, and the string $w$ is on the input. During a left-to-right scan of the input string, the parser shifts zero or moreinput symbols onto the stack, until it is ready to reduce a string of grammarsymbols on top of the stack. It then reduces to the head of the appropriate production. The parser repeats this cycle until it has detected an error or untilthe stack contains the start symbol and the input is empty. Upon entering this configuration, the parser halts and announces successfulcompletion of parsing.
+
+There are four possible actions a shift-reduce parser can make
+\begin{enumerate}
+	\item \textbf{Shift}.  Shift the next input symbol onto the top of the stack.
+	\item \textbf{Reduce}. The right end of the string to be reduced must be at the top ofthe stack. Locate the left end of the string within the stack and decidewith what nonterminal to replace the string.
+	\item \textbf{Accept}. Announce successful completion of parsing.
+	\item \textbf{Error}. Discover a syntax error and call an error recovery routine.
+\end{enumerate}
+
+
+\section{Algorithm}
+
+\begin{algorithm}[H]
+	\caption{Non-predictive recursive descent parser without backtracking}
+	\begin{algorithmic}[1]
+		\Procedure{A}{ }\Comment{A : Non-terminal of grammar}
+		
+		\State Choose an A-production, $A \gets X X . . . X_k$
+		
+		\For{$ i = 1$ to $k$}
+		\If{$X_i$ is a nonterminal}
+		\State Call procedure \Call{$X_i$}{ }
+		\ElsIf{$X_i$ equals to the current input symbol $a$}
+		\State Advance the input to the next symbol
+		\Else
+		\State Error Occurred
+		\EndIf
+		\EndFor
+		\EndProcedure
+		\State \Call{StartSymbol}{ } \Comment{Call start symbol to
+			start parsing}		
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{Non-predictive recursive descent parser with backtracking}
+	\begin{algorithmic}[1]
+		\Procedure{A}{ }\Comment{A : Non-terminal of grammar}
+		
+		\State $inputState \gets CurrentInputState$ 
+		\ForAll{production $P=X X . . . X_k \in A-productions$}
+		\State $backtrack =$ FALSE
+		\For{$ i = 1$ to $k$}
+		\If{$X_i$ is a nonterminal}
+		\State Call procedure \Call{$X_i$}{ }
+		\ElsIf{$X_i$ equals to the current input symbol $a$}
+		\State Advance the input to the next symbol
+		\Else \Comment{Error occurred, iterate to next production}
+		\State $backtrack = TRUE$ 
+		\State $break$
+		\EndIf
+		\EndFor
+		\If{$bracktrack = TRUE$}
+		\State $input \gets inputState$ \Comment{Restore input status}
+		\Else \Comment{Completely parsed a production}
+		\State $break$
+		\EndIf
+		\EndFor
+		\EndProcedure
+		\State \Call{StartSymbol}{ } \Comment{Call start symbol to start parsing}		
+	\end{algorithmic}
+\end{algorithm}
+
+\section{Grammar}
+\subsection{Augmented Grammar}
+\begin{algorithmic}[1]
+	\setcounter{ALG@line}{-1}	
+	\State $E' \quad \rightarrow \quad E$
+	\State $E \quad \rightarrow \quad E \; + \; E$
+	\State $E \quad \rightarrow \quad E \; - \; E$
+	\State $E \quad \rightarrow \quad E \; * \; E$
+	\State $E \quad \rightarrow \quad ( \; E \; )$
+	\State $E \quad \rightarrow \quad i$
+\end{algorithmic}
+
+\subsection{LR(0) Automaton}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{../EXP7/automaton.png}
+	\caption{LR(0) Automaton}
+\end{figure}
+
+\subsection{First \& Follow}
+\begin{table}[!h]
+	\centering
+	\begin{tabular}{|lll|}
+		\hline
+		\multicolumn{3}{|c|}{\textbf{FIRST / FOLLOW table}}                      \\ \hline
+		\multicolumn{1}{|c|}{\textbf{Nonterminal}} & \multicolumn{1}{c|}{\textbf{FIRST}} & \multicolumn{1}{c|}{\textbf{FOLLOW}} \\ \hline
+		\multicolumn{1}{|l|}{E'} & \multicolumn{1}{l|}{\{(,i\}} & \{\$\}         \\ \hline
+		\multicolumn{1}{|l|}{E}  & \multicolumn{1}{l|}{\{(,i\}} & \{\$,+,-,*,)\} \\ \hline
+	\end{tabular}
+\end{table}
+
+\subsection{Parse-Table}
+\begin{table}[!h]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|cccccccccc|}
+			\hline
+			\multicolumn{10}{|c|}{\textbf{LR table}} \\ \hline
+			\multicolumn{1}{|c|}{} &
+			\multicolumn{7}{c|}{\textbf{ACTION}} &
+			\multicolumn{2}{c|}{\textbf{GOTO}} \\ \cline{2-10} 
+			\multicolumn{1}{|c|}{\multirow{-2}{*}{\textbf{State}}} &
+			\multicolumn{1}{c|}{\textbf{+}} &
+			\multicolumn{1}{c|}{\textbf{-}} &
+			\multicolumn{1}{c|}{\textbf{*}} &
+			\multicolumn{1}{c|}{\textbf{(}} &
+			\multicolumn{1}{c|}{\textbf{)}} &
+			\multicolumn{1}{c|}{\textbf{i}} &
+			\multicolumn{1}{c|}{\textbf{\$}} &
+			\multicolumn{1}{c|}{\textbf{E1}} &
+			\multicolumn{1}{c|}{\textbf{E}} \\ \hline
+			\multicolumn{1}{|c|}{0} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s2} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s3} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			1 \\ \hline
+			\multicolumn{1}{|c|}{1} &
+			\multicolumn{1}{c|}{s4} &
+			\multicolumn{1}{c|}{s5} &
+			\multicolumn{1}{c|}{s6} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{acc} &
+			\multicolumn{1}{c|}{} &
+			\\ \hline
+			\multicolumn{1}{|c|}{2} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s2} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s3} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			7 \\ \hline
+			\multicolumn{1}{|c|}{3} &
+			\multicolumn{1}{c|}{r5} &
+			\multicolumn{1}{c|}{r5} &
+			\multicolumn{1}{c|}{r5} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r5} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r5} &
+			\multicolumn{1}{c|}{} &
+			\\ \hline
+			\multicolumn{1}{|c|}{4} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s2} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s3} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			8 \\ \hline
+			\multicolumn{1}{|c|}{5} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s2} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s3} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			9 \\ \hline
+			\multicolumn{1}{|c|}{6} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s2} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s3} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			10 \\ \hline
+			\multicolumn{1}{|c|}{7} &
+			\multicolumn{1}{c|}{s4} &
+			\multicolumn{1}{c|}{s5} &
+			\multicolumn{1}{c|}{s6} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{s11} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{} &
+			\\ \hline
+			\multicolumn{1}{|c|}{8} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s4 / \sout{r1}} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s5 / \sout{r1}} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s6 / \sout{r1}} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r1} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r1} &
+			\multicolumn{1}{c|}{} &
+			\\ \hline
+			\multicolumn{1}{|c|}{9} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s4 / \sout{r2}} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s5 / \sout{r2}} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s6 / \sout{r2}} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r2} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r2} &
+			\multicolumn{1}{c|}{} &
+			\\ \hline
+			\multicolumn{1}{|c|}{10} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s4 / \sout{r3}} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s5 / \sout{r3}} &
+			\multicolumn{1}{c|}{\cellcolor[HTML]{FFC0CB}s6 / \sout{r3}} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r3} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r3} &
+			\multicolumn{1}{c|}{} &
+			\\ \hline
+			\multicolumn{1}{|c|}{11} &
+			\multicolumn{1}{c|}{r4} &
+			\multicolumn{1}{c|}{r4} &
+			\multicolumn{1}{c|}{r4} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r4} &
+			\multicolumn{1}{c|}{} &
+			\multicolumn{1}{c|}{r4} &
+			\multicolumn{1}{c|}{} &
+			\\ \hline
+		\end{tabular}%
+	}
+\end{table}
+
+
+\subsection{Parse-Tree}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[height=2in]{../EXP7/parse_tree.png}
+	\caption{Bottom up parser for i+i*i}
+\end{figure}
+
+\break
+\section{C-Program}
+\lstinputlisting[style=CStyle,language=C]{../EXP7/shiftreducer.c}
+
+\section{Output}
+\lstinputlisting[style=plain]{../EXP7/output.txt}
+
+\section{Result}
+The program compiled and successfully parsed an given expression via Simple LR parser for the given grammar.
