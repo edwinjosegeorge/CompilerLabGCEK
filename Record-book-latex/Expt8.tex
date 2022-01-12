@@ -1,0 +1,69 @@
+\clearpage
+\chapter{First and Follow}
+
+\section{Aim}
+To design and construct a C program to find the first and follow of any given grammar.
+
+\section{Theory}
+\begin{itemize}
+	\item Define \textbf{FIRST($\alpha$)}, where $\alpha$ is any string of grammar symbols, to be the set of terminals that begin strings from $\alpha$. If $\alpha \Rightarrow^* \epsilon$, then $\epsilon$ is also in $FIRST(A)$
+	
+	\item Define \textbf{FOLLOW(A)}, for non-terminal $A$, to be the set of terminals $a$ that can appear immediately to the right of A in some sentential form; that is, the set of terminals $a$ such that there exist a derivation of the form $S \Rightarrow^* \alpha A a \beta$, for some $\alpha$ and $\beta$.
+\end{itemize}
+
+
+\section{Algorithm}
+
+\begin{algorithm}[H]
+	\caption{FOLLOW(X)}
+	\begin{algorithmic}[1]
+		\Procedure{FOLLOW}{X}
+		\State $result = \{\}$
+		\If{$X$ is the start symbol}
+		\State $result \gets result \cup \{\$\}$
+		\EndIf
+		
+		\ForAll{$X \rightarrow \alpha B \beta \in Grammar$}
+		\State $result \gets result \cup \Call{FIRST}{\beta} - \{\epsilon \}$
+		\If{$\epsilon \in \Call{FIRST}{\beta}$}
+		\State $result \gets result \cup \Call{FOLLOW}{B}$
+		\EndIf
+		\EndFor
+		\State \Return $result$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{FIRST(X)}
+	\begin{algorithmic}[1]
+		\Procedure{FIRST}{X}
+			\If{X is a terminal}
+				\State \Return $\{ X \}$
+			\Else \Comment{X is a non terminal and $X \rightarrow Y_1Y_2...Y_k$ for some $k >= 1$}
+				\State $result = \{\}$
+				\ForAll{$Y_i$ in $Y_1Y_2...Y_k \quad \forall \quad grammer \quad X \rightarrow Y_1Y_2...Y_k $}
+					\State $first_{Y_i} \gets \Call{FIRST}{Y_i}$
+					\If{$\epsilon \in first_{Y_i} \quad and \quad i \ne k$}
+						\State $result \gets result \cup first_{Y_i} - \{\epsilon\}$
+					\ElsIf{$i = k$}
+						\State $result \gets result \cup first_{Y_i}$
+					\Else
+						\State break
+					\EndIf
+				\EndFor
+				\State \Return $result$
+			\EndIf
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+\section{C-Program}
+\lstinputlisting[style=CStyle,language=C]{../EXP8/first_and_follow.c}
+
+\section{Output}
+\lstinputlisting[style=plain]{../EXP8/output.txt}
+
+
+\section{Result}
+The program compiled and successfully parsed an given expression and found the first and follow of non terminals.
