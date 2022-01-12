@@ -1,0 +1,35 @@
+Enter the number of grammar production [max 12]: 9
+Enter the augmented grammar in the form 'HEAD' 'PRODUCTION'
+        (0) S E
+        (1) E E+T
+        (2) E E-T
+        (3) E T
+        (4) T T*F
+
+        (5) T T/F
+        (6) T F
+        (7) F (E)
+        (8) F i
+
+ Augmented Grammar
+        (0) S -> { E$ }
+        (1) E -> { E+T }
+        (2) E -> { E-T }
+        (3) E -> { T }
+        (4) T -> { T*F }
+        (5) T -> { T/F }
+        (6) T -> { F }
+        (7) F -> { (E) }
+        (8) F -> { i }
+
+ FIRST()
+        (0) S -> { ( i  }
+        (1) E -> { ( i  }
+        (2) T -> { ( i  }
+        (3) F -> { ( i  }
+
+ FOLLOW()
+        (0) S -> { $  }
+        (1) E -> { $ + - )  }
+        (2) T -> { $ + - ) * /  }
+        (3) F -> { $ + - ) * /  }
